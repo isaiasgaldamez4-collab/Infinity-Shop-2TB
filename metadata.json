@@ -1,0 +1,8 @@
+{
+  "name": "InfinityShop-2TB",
+  "description": "Sistema completo de compras, gestión de proveedores, control de inventario y Kardex interactivo para simulación operativa y aprendizaje contable-administrativo.",
+  "prompt": "Un sistema de compras y inventario para ver como funciona todo el sistema",
+  "tags": ["inventory", "purchases", "kardex", "accounting", "education"],
+  "permissions": [],
+  "capabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
