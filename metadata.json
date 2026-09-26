@@ -1,8 +1,8 @@
 {
-  "name": "InfinityShop-2TB",
-  "description": "Sistema completo de compras, gestión de proveedores, control de inventario y Kardex interactivo para simulación operativa y aprendizaje contable-administrativo.",
-  "prompt": "Un sistema de compras y inventario para ver como funciona todo el sistema",
-  "tags": ["inventory", "purchases", "kardex", "accounting", "education"],
+  "name": "Infinity-2TB",
+  "description": "Sistema web profesional de gestión de inventario, facturación, movimientos y clientes con autenticación por roles y configuración de correo SMTP.",
+  "prompt": "Sistema web profesional de gestión de inventario y facturación Infinity-2TB",
+  "tags": ["inventory", "invoicing", "flask", "python", "fullstack", "enterprise"],
   "permissions": [],
   "capabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
 }

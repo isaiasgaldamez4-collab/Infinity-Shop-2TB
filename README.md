@@ -1,140 +1,106 @@
-# InfinityShop-2TB — Sistema de Compras, Inventario y Kardex
+# INFINITY-2TB — Sistema Profesional de Gestión de Inventario y Facturación
 
-> **"Un sistema de compras y inventario para ver cómo funciona todo el sistema"**  
-> Diseñado para práctica contable, operativa y administrativa en entornos técnicos y comerciales (2TB).
-
----
-
-## 🌟 Características Principales
-
-1. **Dashboard y Métricas en Tiempo Real**:
-   - Valuación total del inventario en almacén monetario.
-   - Detección inmediata de existencias por debajo del stock mínimo y punto de reorden.
-   - Flujo visual interactivo de los 5 pasos del ciclo comercial.
-2. **Catálogo y Control Físico de Almacén**:
-   - Gestión por SKU, código de barras, categorías y ubicaciones físicas.
-   - Barra visual de nivel de stock (mínimo, reorden y capacidad máxima).
-   - Exportación completa del catálogo a formato `.csv`.
-3. **Módulo de Compras y Directorio de Proveedores**:
-   - Emisión de Órdenes de Compra (OC) con cálculo de IVA (16%) y descuentos.
-   - Botón de recepción directa en almacén que actualiza el inventario físico al instante.
-   - Enlace directo con **n8n** para despachar facturas por correo o Telegram.
-4. **Tarjeta Kardex Contable de Almacén**:
-   - Valuación por **Costo Promedio Ponderado** y **PEPS / FIFO**.
-   - Registro de entradas, salidas, saldos acumulados e historial de auditoría contable.
-   - Exportación de la tarjeta Kardex a archivo `.csv`.
-5. **Simulador de Ventas y Punto de Venta (POS)**:
-   - Registro de tickets de venta con deducción en tiempo real del stock.
-   - Determinación del Costo de Ventas (COGS) y Utilidad Bruta generada.
-   - Impresión de tickets de venta y envío a n8n.
-6. **Centro de Aprendizaje 2TB**:
-   - Simulador comparativo de métodos de valuación (Promedio vs PEPS).
-   - Calculadora de Punto de Reorden (ROP) y Stock de Seguridad.
-7. **Integración con n8n (Facturas por Email y Telegram)**:
-   - Envío automático de facturas de compra y tickets de venta vía Webhook de n8n.
-   - Enrutamiento inteligente a **Telegram Bot** o **Email (Gmail/SMTP)**.
-   - Historial de eventos enviados e inspector de JSON.
+> Sistema web profesional, seguro, moderno y completo de inventario y facturación electrónica, preparado para empresas reales con roles de usuario, kardex de auditoría, catálogo de almacén y despacho de correos electrónicos reales vía Gmail SMTP.
 
 ---
 
-## 🚀 Despliegue en Vercel con Dominio Propio
+## 🌟 Módulos Implementados
 
-El proyecto cuenta con el archivo de configuración `vercel.json` optimizado para aplicaciones SPA en Vite.
+### 1. Panel Principal (Dashboard Ejecutivo)
+- **KPIs en tiempo real**:
+  - Total de productos en catálogo.
+  - Productos con poco inventario (punto de reorden).
+  - Productos agotados (Stock 0).
+  - Ventas del día y ventas del mes.
+  - Total de facturas emitidas y clientes registrados.
+  - Usuarios del sistema (Admin, Empleados, Clientes).
+  - Valuación monetaria total del almacén (costo vs venta vs margen).
+- **Tablas de auditoría**: Últimas facturas emitidas y movimientos recientes de inventario.
 
-### Paso 1: Subir tus cambios a tu repositorio de GitHub
+### 2. Autenticación y Control de Permisos
+- Sistema de usuarios con roles:
+  - **Administrador**: Control total del sistema, roles, inventario, configuración SMTP y finanzas.
+  - **Empleado / Operativo**: Gestión operativa de productos, stock, ventas, clientes y facturas.
+  - **Cliente**: Consulta de historial de compras, facturas descargables e información de contacto.
+- Contraseñas protegidas mediante hash (compatibles con `generate_password_hash` de Werkzeug en Python).
+- Perfil de usuario con cambio de contraseña y datos personales.
 
-Abre tu terminal en la carpeta del proyecto y ejecuta:
+### 3. Inventario Completo
+- Campos por producto: ID, Código/SKU, Nombre, Descripción, Categoría, Marca, Precio de compra, Precio de venta, Cantidad disponible, Stock mínimo, Unidad de medida, Imagen, Estado (Activo, Inactivo, Descontinuado), Fechas de creación y actualización.
+- Búsqueda en tiempo real, filtros por categoría y condición de stock (bajo, agotado, normal), ordenación dinámica.
+- Modal de ajuste rápido de existencias (conteo físico, entrada, salida, devolución).
+- Exportación del catálogo a formato `.csv`.
+
+### 4. Movimientos de Inventario (Kardex Contable)
+- Registro automático e inmutable de movimientos:
+  - **Entrada** (Recepción de lotes / compras)
+  - **Salida** (Mermas / uso interno)
+  - **Venta** (Deducción automática por factura)
+  - **Devolución** (Reingreso de clientes)
+  - **Ajuste** (Conteo físico)
+  - **Corrección**
+- Guarda producto, usuario responsable, cantidad, saldo anterior, saldo nuevo, motivo, observaciones, fecha y hora.
+- Exportación a `.csv` para auditoría y contabilidad.
+
+### 5. Directorio y Gestión de Clientes
+- Datos: Nombre completo, Empresa/Razón Social, Identificación Fiscal (RFC/Tax ID), Teléfono, Correo electrónico, Dirección, Ciudad, País, Estado.
+- Historial de compras acumuladas y detalle de todas las facturas emitidas al cliente.
+
+### 6. Facturación Digital Profesional
+- Emisión de facturas electrónicas con folio correlativo (`FAC-2026-XXXX`).
+- Autocompletado de productos con validación estricta de existencias en almacén.
+- Cálculo automático de subtotal, IVA (16%), descuentos y total.
+- Formato imprimible oficial con identidad corporativa de **Infinity-2TB**.
+- Envío directo de la factura al correo del cliente.
+
+### 7. Correos Electrónicos Reales (Gmail SMTP)
+- Configuración de correo real con servidor `smtp.gmail.com`, puerto `587`, STARTTLS.
+- Soporte para variables de entorno mediante `.env`.
+- Asistente explicativo para generar la **Contraseña de Aplicación de 16 caracteres de Google**.
+- Herramienta de prueba de conexión en vivo y registro de auditoría de correos enviados.
+
+### 8. Backend Modular en Python / Flask / SQLAlchemy
+En la carpeta `/backend_flask/` se encuentra el código completo en Python listo para ejecutar en producción:
+- `app.py`: Factory de la aplicación y registro de Blueprints.
+- `config.py`: Configuración mediante `.env` (Desarrollo y Producción).
+- `models/`: Modelos SQLAlchemy (`User`, `Product`, `InventoryMovement`, `Customer`, `Invoice`).
+- `routes/`: Blueprints (`auth`, `dashboard`, `inventory`, `customers`, `invoices`).
+- `services/mail_service.py`: Despacho SMTP real con `smtplib`.
+- `requirements.txt`: Dependencias para Python 3.10+.
+
+---
+
+## 🚀 Despliegue en Vercel (Frontend Web)
+
+1. Sube tu código a GitHub:
+   ```bash
+   git add .
+   git commit -m "feat: Infinity-2TB sistema profesional de inventario y facturación"
+   git push origin main
+   ```
+2. Importa el repositorio en [vercel.com](https://vercel.com).
+3. Vercel detectará la configuración de `vercel.json` y compilará la aplicación automáticamente.
+4. En **Settings > Domains**, asigna tu dominio propio (ejemplo: `tudominio.com`).
+
+---
+
+## 🐍 Ejecución del Backend en Python Flask
 
 ```bash
-# Inicializar repositorio git (si no está iniciado)
-git init
+# 1. Crear entorno virtual
+python -m venv venv
+source venv/bin/activate  # En Windows: venv\Scripts\activate
 
-# Agregar todos los archivos
-git add .
+# 2. Instalar dependencias
+pip install -r backend_flask/requirements.txt
 
-# Crear el commit
-git commit -m "feat: InfinityShop-2TB con integración Vercel y n8n"
+# 3. Configurar variables de entorno
+cp backend_flask/.env.example backend_flask/.env
 
-# Conectar con tu repositorio de GitHub (reemplaza con tu URL)
-git branch -M main
-git remote add origin https://github.com/isaiasgaldamez4-collab/InfinityShop-2TB.git
-
-# Subir los cambios a GitHub
-git push -u origin main --force
+# 4. Iniciar servidor Flask
+python -m backend_flask.app
 ```
-
-### Paso 2: Importar el proyecto en Vercel
-
-1. Inicia sesión en [vercel.com](https://vercel.com) con tu cuenta de GitHub.
-2. Haz clic en **"Add New..."** > **"Project"**.
-3. Selecciona tu repositorio: `InfinityShop-2TB`.
-4. Vercel detectará automáticamente:
-   - **Framework Preset**: `Vite`
-   - **Build Command**: `npm run build`
-   - **Output Directory**: `dist`
-5. Haz clic en **"Deploy"**. Tu aplicación estará en línea en segundos.
-
-### Paso 3: Configurar tu Dominio Propio en Vercel
-
-1. Dentro del panel de tu proyecto en Vercel, ve a **Settings** > **Domains**.
-2. Escribe tu nombre de dominio (ejemplo: `tudominio.com` o `shop.tudominio.com`) y haz clic en **Add**.
-3. Vercel te mostrará los registros DNS que debes configurar en tu proveedor de dominio (GoDaddy, Namecheap, Cloudflare, etc.):
-   - **Para dominio principal (`tudominio.com`)**:
-     - Tipo: `A` | Nombre: `@` | Valor: `76.76.21.21`
-   - **Para subdominio (`www.tudominio.com` o `app.tudominio.com`)**:
-     - Tipo: `CNAME` | Nombre: `www` o `app` | Valor: `cname.vercel-dns.com`
-4. Una vez agregados los registros, Vercel verificará la propagación y emitirá un certificado SSL HTTPS gratuito automáticamente.
-
----
-
-## ⚡ Automatización con n8n (Facturas por Email y Telegram)
-
-La aplicación envía un paquete JSON estructurado al webhook de tu instancia de n8n cada vez que:
-- Emites o recibes una **Factura / Orden de Compra**.
-- Realizas una **Venta en el Simulador POS**.
-- Las existencias caen a niveles de **Stock Bajo / Reorden**.
-
-### 1. Configurar tu Webhook en la App
-Ve a la pestaña **"Automatización n8n"** dentro de la barra de navegación de InfinityShop y escribe:
-- **URL del Webhook de n8n**: `https://tu-n8n.com/webhook/infinityshop-facturas`
-- **Canal preferido**: `Ambos (Email + Telegram)`, `Solo Email` o `Solo Telegram`.
-- **Correo Destinatario**: Tu correo donde quieres recibir las facturas.
-- **Chat ID de Telegram**: Tu Chat ID o canal.
-
-### 2. Cómo obtener tu Chat ID de Telegram:
-1. Crea un bot con [@BotFather](https://t.me/BotFather) en Telegram usando `/newbot` y guarda el token.
-2. Inicia un chat con tu bot o agrégalo a un grupo o canal.
-3. Para saber tu Chat ID numérico, escribe un mensaje a [@userinfobot](https://t.me/userinfobot) o consulta `https://api.telegram.org/bot<TU_TOKEN>/getUpdates`.
-
-### 3. Plantilla de Workflow para n8n:
-Copia el JSON disponible en la pestaña **"Automatización n8n"** del sistema y pégalo directamente en tu lienzo de n8n (<kbd>Ctrl + V</kbd>).
-
-El flujo se compone de:
-1. **Webhook Node (POST)**: Recibe el payload JSON.
-2. **Switch Node**: Enruta según el canal (`telegram`, `email`, o `both`).
-3. **Telegram Node**: Envía el mensaje con Markdown elegante y lista de artículos.
-4. **Email Node (Gmail/SMTP)**: Envía la factura con asunto formateado.
-
----
-
-## 💻 Ejecución en Desarrollo Local
-
-```bash
-# Instalar dependencias
-npm install
-
-# Iniciar servidor de desarrollo en puerto 3000
-npm run dev
-
-# Compilar para producción
-npm run build
-
-# Previsualizar compilación
-npm run preview
-```
-
----
-
-## 📄 Licencia
-
-Desarrollado para fines educativos y empresariales — Bachillerato Técnico 2TB.
+Acceso en: `http://localhost:5000`  
+- **Admin**: `admin@infinity2tb.com` / `admin123`  
+- **Empleado**: `empleado@infinity2tb.com` / `empleado123`  
+- **Cliente**: `cliente@infinity2tb.com` / `cliente123`

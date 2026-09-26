@@ -1,159 +1,144 @@
 import React, { useState } from 'react';
-import { InventoryProvider, useInventory } from './context/InventoryContext';
+import { AppProvider, useApp } from './context/AppContext';
 import { Navbar } from './components/Navbar';
-import { Dashboard } from './components/Dashboard';
+import { DashboardView } from './components/DashboardView';
 import { InventoryView } from './components/InventoryView';
-import { PurchasesView } from './components/PurchasesView';
-import { KardexView } from './components/KardexView';
-import { SalesSimulator } from './components/SalesSimulator';
-import { LearningCenter } from './components/LearningCenter';
-import { N8nIntegrationView } from './components/N8nIntegrationView';
-import { NewProductModal } from './components/NewProductModal';
-import { NewPurchaseModal } from './components/NewPurchaseModal';
-import { NewSupplierModal } from './components/NewSupplierModal';
-import { ManualMovementModal } from './components/ManualMovementModal';
-import { PurchaseDetailModal } from './components/PurchaseDetailModal';
-import { Product, PurchaseOrder } from './types/inventory';
+import { MovementsView } from './components/MovementsView';
+import { CustomersView } from './components/CustomersView';
+import { InvoicingView } from './components/InvoicingView';
+import { EmailSettingsView } from './components/EmailSettingsView';
+import { PythonCodeView } from './components/PythonCodeView';
+import { ProductModal } from './components/ProductModal';
+import { NewInvoiceModal } from './components/NewInvoiceModal';
+import { UserProfileModal } from './components/UserProfileModal';
+import { AuthModal } from './components/AuthModal';
+import { Product } from './types';
+import { Boxes, Shield, Terminal, Mail, Server } from 'lucide-react';
 
-const AppContent: React.FC = () => {
-  const { receivePurchaseOrder, resetToDefaults } = useInventory();
-
-  // Navigation
-  const [currentTab, setCurrentTab] = useState<'dashboard' | 'inventory' | 'purchases' | 'kardex' | 'sales' | 'learning' | 'n8n'>('dashboard');
+function MainApp() {
+  const [currentTab, setCurrentTab] = useState<string>('dashboard');
 
   // Modals state
-  const [isNewProductOpen, setIsNewProductOpen] = useState(false);
-  const [editingProduct, setEditingProduct] = useState<Product | null>(null);
-  const [isNewPurchaseOpen, setIsNewPurchaseOpen] = useState(false);
-  const [isNewSupplierOpen, setIsNewSupplierOpen] = useState(false);
-  const [manualMovementProduct, setManualMovementProduct] = useState<Product | null>(null);
-  const [viewingOrder, setViewingOrder] = useState<PurchaseOrder | null>(null);
-  const [kardexSelectedProduct, setKardexSelectedProduct] = useState<string | undefined>(undefined);
-
-  // Cross-module handlers
-  const handleViewProductKardex = (productId: string) => {
-    setKardexSelectedProduct(productId);
-    setCurrentTab('kardex');
-  };
-
-  const handleOpenEditProduct = (product: Product) => {
-    setEditingProduct(product);
-    setIsNewProductOpen(true);
-  };
+  const [isProductModalOpen, setIsProductModalOpen] = useState(false);
+  const [productToEdit, setProductToEdit] = useState<Product | null>(null);
+  const [isInvoiceModalOpen, setIsInvoiceModalOpen] = useState(false);
+  const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
+  const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
 
   const handleOpenNewProduct = () => {
-    setEditingProduct(null);
-    setIsNewProductOpen(true);
+    setProductToEdit(null);
+    setIsProductModalOpen(true);
+  };
+
+  const handleEditProduct = (product: Product) => {
+    setProductToEdit(product);
+    setIsProductModalOpen(true);
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 flex flex-col">
-      {/* Top Navigation */}
+    <div className="min-h-screen bg-slate-50 text-slate-900 flex flex-col font-sans">
+      {/* Top Navigation Bar */}
       <Navbar
         currentTab={currentTab}
         setCurrentTab={setCurrentTab}
-        onOpenNewProduct={handleOpenNewProduct}
-        onOpenNewPurchase={() => setIsNewPurchaseOpen(true)}
-        onResetData={resetToDefaults}
+        onOpenProfile={() => setIsProfileModalOpen(true)}
+        onOpenAuth={() => setIsAuthModalOpen(true)}
       />
 
-      {/* Main Content Area */}
-      <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 pt-6">
+      {/* Main View Area */}
+      <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6">
         {currentTab === 'dashboard' && (
-          <Dashboard
-            onNavigateTab={setCurrentTab}
-            onOpenNewPurchase={() => setIsNewPurchaseOpen(true)}
+          <DashboardView
+            onNavigate={tab => setCurrentTab(tab)}
             onOpenNewProduct={handleOpenNewProduct}
-            onSelectKardexProduct={handleViewProductKardex}
+            onOpenNewInvoice={() => setIsInvoiceModalOpen(true)}
           />
         )}
 
         {currentTab === 'inventory' && (
           <InventoryView
             onOpenNewProduct={handleOpenNewProduct}
-            onEditProduct={handleOpenEditProduct}
-            onOpenAdjustment={prod => setManualMovementProduct(prod)}
-            onViewProductKardex={handleViewProductKardex}
+            onEditProduct={handleEditProduct}
           />
         )}
 
-        {currentTab === 'purchases' && (
-          <PurchasesView
-            onOpenNewPurchase={() => setIsNewPurchaseOpen(true)}
-            onOpenNewSupplier={() => setIsNewSupplierOpen(true)}
-            onViewOrderDetails={order => setViewingOrder(order)}
+        {currentTab === 'movements' && <MovementsView />}
+
+        {currentTab === 'customers' && <CustomersView />}
+
+        {currentTab === 'invoicing' && (
+          <InvoicingView
+            onOpenNewInvoiceModal={() => setIsInvoiceModalOpen(true)}
           />
         )}
 
-        {currentTab === 'kardex' && (
-          <KardexView
-            initialProductId={kardexSelectedProduct}
-            onOpenManualMovement={prod => setManualMovementProduct(prod)}
-          />
-        )}
+        {currentTab === 'email_smtp' && <EmailSettingsView />}
 
-        {currentTab === 'sales' && <SalesSimulator />}
-
-        {currentTab === 'learning' && <LearningCenter />}
-
-        {currentTab === 'n8n' && <N8nIntegrationView />}
+        {currentTab === 'python_flask' && <PythonCodeView />}
       </main>
 
       {/* Footer */}
       <footer className="bg-white border-t border-slate-200 py-6 text-xs text-slate-500">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-3">
           <div className="flex items-center gap-2">
-            <span className="font-bold text-slate-700">InfinityShop-2TB</span>
+            <span className="font-bold text-slate-800">Infinity-2TB</span>
             <span>•</span>
-            <span>Sistema Integral de Compras, Inventario y Valuación Contable</span>
+            <span>Sistema Profesional de Gestión de Inventario & Facturación Digital</span>
           </div>
-          <div className="text-slate-400">
-            Diseñado para práctica administrativa y bachillerato técnico
+
+          <div className="flex items-center gap-4 text-slate-400">
+            <span>Python Flask + SQLAlchemy + Vite</span>
+            <span>•</span>
+            <button
+              onClick={() => setCurrentTab('python_flask')}
+              className="text-blue-600 hover:underline font-semibold"
+            >
+              Arquitectura Python
+            </button>
+            <span>•</span>
+            <button
+              onClick={() => setCurrentTab('email_smtp')}
+              className="text-rose-600 hover:underline font-semibold"
+            >
+              Gmail SMTP
+            </button>
           </div>
         </div>
       </footer>
 
       {/* Modals */}
-      <NewProductModal
-        isOpen={isNewProductOpen}
+      <ProductModal
+        isOpen={isProductModalOpen}
         onClose={() => {
-          setIsNewProductOpen(false);
-          setEditingProduct(null);
+          setIsProductModalOpen(false);
+          setProductToEdit(null);
         }}
-        productToEdit={editingProduct}
+        productToEdit={productToEdit}
       />
 
-      <NewPurchaseModal
-        isOpen={isNewPurchaseOpen}
-        onClose={() => setIsNewPurchaseOpen(false)}
+      <NewInvoiceModal
+        isOpen={isInvoiceModalOpen}
+        onClose={() => setIsInvoiceModalOpen(false)}
       />
 
-      <NewSupplierModal
-        isOpen={isNewSupplierOpen}
-        onClose={() => setIsNewSupplierOpen(false)}
+      <UserProfileModal
+        isOpen={isProfileModalOpen}
+        onClose={() => setIsProfileModalOpen(false)}
+        onOpenAuth={() => setIsAuthModalOpen(true)}
       />
 
-      <ManualMovementModal
-        isOpen={!!manualMovementProduct}
-        onClose={() => setManualMovementProduct(null)}
-        product={manualMovementProduct}
-      />
-
-      <PurchaseDetailModal
-        order={viewingOrder}
-        onClose={() => setViewingOrder(null)}
-        onReceiveOrder={receivePurchaseOrder}
+      <AuthModal
+        isOpen={isAuthModalOpen}
+        onClose={() => setIsAuthModalOpen(false)}
       />
     </div>
   );
-};
+}
 
-export const App: React.FC = () => {
+export default function App() {
   return (
-    <InventoryProvider>
-      <AppContent />
-    </InventoryProvider>
+    <AppProvider>
+      <MainApp />
+    </AppProvider>
   );
-};
-
-export default App;
+}
